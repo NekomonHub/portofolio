@@ -1,0 +1,276 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Navy Image Download — Demo</title>  <!-- Google Font -->  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">  <!-- AOS (Animate On Scroll) -->  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">  <style>
+    :root{
+      --bg-1: #041022; /* deep navy */
+      --bg-2: #07243a; /* slightly brighter */
+      --card: rgba(255,255,255,0.04);
+      --accent: #3ea7ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 16px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,var(--bg-1), var(--bg-2));
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+    }
+
+    .wrapper{
+      width:100%;
+      max-width:920px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:20px;
+    }
+
+    .card{
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      padding:20px;
+    }
+
+    .header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .title{
+      display:flex;align-items:center;gap:12px
+    }
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#1b6eff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021428;font-size:18px
+    }
+    h1{font-size:18px;margin:0}
+    p.sub{margin:0;color:rgba(230,238,248,0.7);font-size:13px}
+
+    .image-area{
+      margin-top:12px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .stage{
+      width:100%;
+      max-width:760px;
+      aspect-ratio:16/9;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    .stage img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      transition: transform .45s cubic-bezier(.2,.9,.2,1);
+    }
+    .stage:hover img{ transform: scale(1.02) }
+
+    .controls{
+      width:100%;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .left-controls{display:flex;gap:10px}
+
+    .btn{
+      display:inline-flex;gap:8px;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;font-weight:600;border:none;cursor:pointer;
+      background:linear-gradient(90deg,var(--accent),#1b6eff);
+      color:#012031;
+      box-shadow: 0 6px 18px rgba(30,110,255,0.12);
+      transition: transform .15s ease, opacity .15s;
+    }
+    .btn:active{ transform: translateY(1px) }
+
+    .btn.ghost{
+      background:transparent;color:var(--accent);border:1px solid rgba(62,167,255,0.12);backdrop-filter: blur(6px);
+    }
+
+    .file-input{display:none}
+
+    .info{font-size:13px;color:rgba(230,238,248,0.7)}
+
+    .notice{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:28px;padding:10px 14px;border-radius:12px;background:rgba(3,12,22,0.8);border:1px solid rgba(62,167,255,0.12);font-size:13px;color:var(--accent);box-shadow:0 6px 18px rgba(2,8,20,0.6);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;
+    }
+    .notice.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    footer.small{font-size:12px;color:rgba(230,238,248,0.55);text-align:center;margin-top:6px}
+
+    @media (max-width:720px){
+      .stage{aspect-ratio: 4/3}
+      .btn{padding:10px 12px}
+      .wrapper{padding:0 6px}
+    }
+  </style></head>
+<body>
+  <div class="wrapper">
+    <div class="card" data-aos="fade-up">
+      <div class="header">
+        <div class="title">
+          <div>
+            <h1>MyFile</h1>
+          </div>
+        </div>
+      </div><div class="image-area">
+    <div class="stage" id="stage" data-aos="zoom-in">
+      <!-- preview image; default path is configurable below -->
+      <img id="preview" alt="Preview image" src="ZennReallyCyber.jpg" />
+    </div>
+
+    <div class="controls" data-aos="fade-up" data-aos-delay="120">
+      <div class="left-controls">
+        <button id="downloadBtn" class="btn" title="Download current image">Download</button>
+        <button id="resetBtn" class="btn ghost">Reset</button>
+      </div>
+
+      <div class="info" id="meta">Memuat gambar…</div>
+    </div>
+
+    <footer class="small">© Powered by ZennDev</footer>
+  </div>
+</div>
+
+  </div>  <div id="notice" class="notice" role="status" aria-live="polite"></div>  <!-- AOS script -->  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>  <script>
+    AOS.init({ once:true, duration:700, easing:'ease-out-cubic' });
+
+    // === CONFIG ===
+    // Ganti path ini sesuai lokasi gambarmu (relatif terhadap file HTML atau absolute URL)
+    const defaultImagePath = './ZennReallyCyber.jpg';
+    let currentFileName = defaultImagePath.split('/').pop() || 'image.png';
+
+    const preview = document.getElementById('preview');
+    const meta = document.getElementById('meta');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const noticeEl = document.getElementById('notice');
+
+    function showNotice(msg, timeout = 4000){
+      noticeEl.textContent = msg;
+      noticeEl.classList.add('show');
+      clearTimeout(noticeEl._t);
+      noticeEl._t = setTimeout(()=> noticeEl.classList.remove('show'), timeout);
+    }
+
+    // Initialize preview with your provided image path
+    function loadDefault(){
+      preview.src = defaultImagePath;
+      meta.textContent = `Sumber: ${defaultImagePath}`;
+      currentFileName = defaultImagePath.split('/').pop() || 'image.png';
+    }
+
+    // Try to verify image loads
+    preview.addEventListener('load', ()=>{
+      // show natural dimensions
+      meta.textContent = `${currentFileName} — ${preview.naturalWidth}×${preview.naturalHeight}`;
+    });
+    preview.addEventListener('error', ()=>{
+      meta.textContent = 'Gagal memuat gambar. Periksa path pada variabel defaultImagePath.';
+      showNotice('Gambar tidak ditemukan. Ubah defaultImagePath di script sesuai lokasi gambarmu.');
+    });
+
+    // download handler — no alert; all feedback via UI notice
+    downloadBtn.addEventListener('click', async ()=>{
+      downloadBtn.disabled = true;
+      const prevText = downloadBtn.textContent;
+      downloadBtn.textContent = '⏳ Preparing...';
+      try{
+        if(!preview.src){
+          showNotice('Tidak ada gambar untuk didownload.');
+          return;
+        }
+
+        if(preview.src.startsWith('data:')){
+          triggerDownload(preview.src, currentFileName);
+          showNotice('Download dimulai.');
+        } else {
+          try{
+            const res = await fetch(preview.src);
+            if(!res.ok) throw new Error('network');
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            triggerDownload(url, currentFileName);
+            setTimeout(()=>URL.revokeObjectURL(url), 2000);
+            showNotice('Download dimulai.');
+          }catch(err){
+            // fallback: try canvas method (may fail due to CORS)
+            const canvas = document.createElement('canvas');
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = ()=>{
+              canvas.width = img.naturalWidth;
+              canvas.height = img.naturalHeight;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img,0,0);
+              try{
+                const data = canvas.toDataURL('image/png');
+                triggerDownload(data, currentFileName.replace(/\.[^/.]+$/, '') + '.png');
+                showNotice('Download dimulai (via canvas).');
+              }catch(e){
+                // instead of alert, show guidance via notice
+                console.warn('CORS/tainted canvas', e);
+                showNotice('Gagal mendownload karena pembatasan CORS. Letakkan gambar di server yang sama atau gunakan file lokal.');
+              }
+            };
+            img.onerror = ()=>{
+              showNotice('Gagal memproses gambar. Pastikan path benar dan file gambar dapat diakses.');
+            };
+            img.src = preview.src;
+          }
+        }
+      }finally{
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = prevText;
+      }
+    });
+
+    function triggerDownload(href, filename){
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // reset -> reload default image
+    resetBtn.addEventListener('click', ()=>{
+      loadDefault();
+      showNotice('Kembali ke gambar default.');
+    });
+
+    // initial load
+    loadDefault();
+  </script></body>
+</html>
