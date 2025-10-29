@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4 Slot Gambar</title>
+<style>
+  :root {
+    --primary-color: #e63946; /* merah */
+    --bg-color: #1d1d1d; /* hitam gelap */
+    --text-color: #fff;
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .slot {
+    background: #2b2b2b;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s;
+  }
+
+  .slot:hover {
+    transform: scale(1.05);
+  }
+
+  .slot img {
+    width: auto;       /* ukuran asli */
+    height: auto;      /* ukuran asli */
+    max-width: 100%;   /* responsive di layar kecil */
+    border: 1px solid var(--primary-color);
+    margin-bottom: 10px;
+    background: #000;
+  }
+
+  .slot p {
+    color: var(--text-color);
+    text-align: center;
+    margin: 5px 0 10px;
+  }
+
+  button {
+    padding: 8px 15px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background: #d62828;
+  }
+</style>
+</head>
+<body>
+
+<h1>GausahNyocot.vercel.app</h1>
+
+<div class="container">
+  <div class="slot">
+    <img id="img0" src="gambar1.jpeg" alt="Nyocot">
+    <p id="desc0">Gsh nyocot</p>
+    <button onclick="downloadImage(0)">Download</button>
+  </div>
+  <div class="slot">
+    <img id="img1" src="gambar2.jpeg" alt="Nyocot">
+    <p id="desc1">Gsh nyocot</p>
+    <button onclick="downloadImage(1)">Download</button>
+  </div>
+  <div class="slot">
+    <img id="img2" src="gambar3.jpeg" alt="Nyocot">
+    <p id="desc2">Gsh nyocot</p>
+    <button onclick="downloadImage(2)">Download</button>
+  </div>
+  <div class="slot">
+    <img id="img3" src="gambar4.jpeg" alt="Nyocot">
+    <p id="desc3">Gsh nyocot</p>
+    <button onclick="downloadImage(3)">Download</button>
+  </div>
+</div>
+
+<script>
+function downloadImage(index) {
+  const img = document.getElementById('img' + index);
+  if (!img.src) return alert("Gambar tidak tersedia!");
+
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+  image.src = img.src;
+  image.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth;   // pakai ukuran asli lebar
+    canvas.height = image.naturalHeight; // pakai ukuran asli tinggi
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0);
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `gambar_slot_${index + 1}.png`;
+    link.click();
+  }
+}
+</script>
+
+</body>
+</html>
